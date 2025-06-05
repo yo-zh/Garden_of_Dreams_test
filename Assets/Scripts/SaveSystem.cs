@@ -33,4 +33,33 @@ public class SaveSystem : MonoBehaviour
             return new GameData(); // По умолчанию
         }
     }
+
+    public void SaveInventory(Inventory inventory)
+    {
+        GameData data = new GameData();
+        data.maxSlots = inventory.maxSlots;
+
+        foreach (InventorySlot slot in inventory.items)
+        {
+            data.inventoryItems.Add(new InventorySlotData(slot.item.itemName, slot.amount));
+        }
+
+        SaveGame(data);
+    }
+
+    public void LoadInventory(Inventory inventory, Item[] allItems)
+    {
+        GameData data = LoadGame();
+        inventory.items.Clear();
+        inventory.maxSlots = data.maxSlots;
+
+        foreach (InventorySlotData slotData in data.inventoryItems)
+        {
+            Item itemToAdd = System.Array.Find(allItems, item => item.itemName == slotData.itemName);
+            if (itemToAdd != null)
+            {
+                inventory.items.Add(new InventorySlot(itemToAdd, slotData.amount));
+            }
+        }
+    }
 }

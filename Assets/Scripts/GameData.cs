@@ -1,18 +1,27 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-[Serializable] // JSON
+[System.Serializable] // JSON
 public class GameData
 {
-    public Vector3 playerPosition;
-    public float playerHealth;
-    public List<InventoryItem> inventoryItems;
+    public List<InventorySlotData> inventoryItems;
+    public int maxSlots;
 
-    [Serializable]
-    public class InventoryItem
+    public GameData()
     {
-        public string itemId;
-        public int amount;
+        inventoryItems = new List<InventorySlotData>();
+        maxSlots = 5;
+    }
+}
+
+[System.Serializable]
+public class InventorySlotData
+{
+    public string itemName;
+    public int amount;
+
+    public InventorySlotData(string name, int count)
+    {
+        itemName = name;
+        amount = count;
     }
 }

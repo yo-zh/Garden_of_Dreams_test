@@ -134,4 +134,35 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+
+    public void SaveInventory(SaveSystem saveSystem)
+    {
+        GameData data = new GameData();
+        data.maxSlots = this.maxSlots;
+
+        foreach (InventorySlot slot in items)
+        {
+            data.inventoryItems.Add(new InventorySlotData(slot.item.itemName, slot.amount));
+        }
+
+        saveSystem.SaveGame(data);
+    }
+
+    public void LoadInventory(SaveSystem saveSystem, Item[] allItems)
+    {
+        GameData data = saveSystem.LoadGame();
+        items.Clear();
+        maxSlots = data.maxSlots;
+
+        foreach (InventorySlotData slotData in data.inventoryItems)
+        {
+            Item itemToAdd = System.Array.Find(allItems, item => item.itemName == slotData.itemName);
+            if (itemToAdd != null)
+            {
+                items.Add(new InventorySlot(itemToAdd, slotData.amount));
+            }
+        }
+
+        UpdateUI();
+    }
 }
