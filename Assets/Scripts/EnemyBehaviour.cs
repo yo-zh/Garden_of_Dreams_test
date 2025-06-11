@@ -1,12 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
     private HealthSystem healthSystem;
-    private int healthPoints;
 
     [SerializeField] private float speed = 5;
     [SerializeField] private int damage = 1;
@@ -37,7 +34,11 @@ public class EnemyBehaviour : MonoBehaviour
         if (!isAttacking)
         {
             isAttacking = true;
-            player.GetComponent<HealthSystem>().TakeDamage(damage);
+            var healthSystem = player.GetComponent<HealthSystem>();
+            if (healthSystem != null)
+            {
+                healthSystem.TakeDamage(damage);
+            }
             Debug.Log("Ouch!");
             yield return new WaitForSeconds(1f);
             isAttacking = false;
